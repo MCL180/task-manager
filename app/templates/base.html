@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Task Manager{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-left">
+      <a href="/" class="nav-brand">Task Manager</a>
+    </div>
+    <div class="nav-right" id="nav-right">
+      <span id="nav-user"></span>
+      <a href="#" id="nav-logout" class="nav-link" style="display:none">退出</a>
+      <a href="/login" id="nav-login" class="nav-link">登录</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <script>
+    // 全局：检查登录状态
+    const token = localStorage.getItem('token');
+    const username = localStorage.getItem('username');
+
+    if (token && username) {
+      document.getElementById('nav-user').textContent = username;
+      document.getElementById('nav-logout').style.display = 'inline';
+      document.getElementById('nav-login').style.display = 'none';
+    }
+
+    document.getElementById('nav-logout').addEventListener('click', () => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('username');
+      window.location.href = '/login';
+    });
+  </script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>
